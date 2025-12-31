@@ -254,26 +254,68 @@
         color: var(--primary);
       }
 
-      /* 카운트다운 */
+      /* 카운트다운 - 극적인 스타일 */
       .countdown {
-        background: linear-gradient(135deg, var(--primary) 0%, #0052cc 100%);
-        border-radius: 12px;
-        padding: 24px;
+        background: linear-gradient(
+          135deg,
+          #0a0a0a 0%,
+          #1a1a2e 50%,
+          #16213e 100%
+        );
+        border-radius: 16px;
+        padding: 32px 24px;
         color: white;
         text-align: center;
         margin: 20px 0;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      }
+
+      .countdown::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(
+          circle,
+          rgba(0, 102, 255, 0.1) 0%,
+          transparent 60%
+        );
+        animation: pulse-bg 4s ease-in-out infinite;
+      }
+
+      @keyframes pulse-bg {
+        0%,
+        100% {
+          opacity: 0.5;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.1);
+        }
       }
 
       .countdown .label {
-        font-size: 13px;
-        opacity: 0.9;
-        margin-bottom: 8px;
+        font-size: 14px;
+        opacity: 0.7;
+        margin-bottom: 16px;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        position: relative;
+        z-index: 1;
       }
 
       .countdown .time-display {
         display: flex;
         justify-content: center;
-        gap: 16px;
+        align-items: center;
+        gap: 4px;
+        position: relative;
+        z-index: 1;
       }
 
       .countdown .time-unit {
@@ -281,23 +323,86 @@
       }
 
       .countdown .time-unit .number {
-        font-size: 36px;
+        font-size: 56px;
         font-weight: 800;
         line-height: 1;
+        font-family: "SF Mono", "Roboto Mono", monospace;
+        text-shadow:
+          0 0 20px rgba(0, 200, 255, 0.8),
+          0 0 40px rgba(0, 200, 255, 0.4),
+          0 0 60px rgba(0, 200, 255, 0.2);
+        animation: glow 2s ease-in-out infinite alternate;
+        min-width: 70px;
+      }
+
+      @keyframes glow {
+        from {
+          text-shadow:
+            0 0 20px rgba(0, 200, 255, 0.8),
+            0 0 40px rgba(0, 200, 255, 0.4);
+        }
+        to {
+          text-shadow:
+            0 0 30px rgba(0, 200, 255, 1),
+            0 0 60px rgba(0, 200, 255, 0.6),
+            0 0 80px rgba(0, 200, 255, 0.3);
+        }
+      }
+
+      .countdown .colon {
+        font-size: 48px;
+        font-weight: 300;
+        opacity: 0.6;
+        animation: blink 1s ease-in-out infinite;
+        margin: 0 2px;
+      }
+
+      @keyframes blink {
+        0%,
+        100% {
+          opacity: 0.6;
+        }
+        50% {
+          opacity: 0.2;
+        }
       }
 
       .countdown .time-unit .unit {
-        font-size: 11px;
-        opacity: 0.8;
-        margin-top: 4px;
+        font-size: 10px;
+        opacity: 0.5;
+        margin-top: 8px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
       }
 
       .countdown .end-time {
         font-size: 12px;
-        opacity: 0.8;
-        margin-top: 12px;
-        padding-top: 12px;
-        border-top: 1px solid rgba(255, 255, 255, 0.2);
+        opacity: 0.6;
+        margin-top: 20px;
+        padding-top: 16px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        position: relative;
+        z-index: 1;
+      }
+
+      .countdown .end-time strong {
+        color: #00c8ff;
+      }
+
+      /* 숫자 변경 애니메이션 */
+      .countdown .number.tick {
+        animation: tick 0.3s ease-out;
+      }
+
+      @keyframes tick {
+        0% {
+          transform: scale(1.1);
+          opacity: 0.8;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
       }
 
       /* 응급 신호 */
@@ -733,19 +838,17 @@
         <div class="label">집중 관찰 종료까지</div>
         <div class="time-display">
           <div class="time-unit">
-            <div class="number" id="countDays">2</div>
-            <div class="unit">일</div>
-          </div>
-          <div class="time-unit">
-            <div class="number" id="countHours">14</div>
+            <div class="number" id="countHours">62</div>
             <div class="unit">시간</div>
           </div>
+          <span class="colon">:</span>
           <div class="time-unit">
             <div class="number" id="countMins">50</div>
             <div class="unit">분</div>
           </div>
+          <span class="colon">:</span>
           <div class="time-unit">
-            <div class="number" id="countSecs">0</div>
+            <div class="number" id="countSecs">00</div>
             <div class="unit">초</div>
           </div>
         </div>
@@ -1082,31 +1185,56 @@
         );
       }
 
-      // 카운트다운 업데이트
+      // 카운트다운 업데이트 (극적인 애니메이션 포함)
+      let lastHours = -1,
+        lastMins = -1,
+        lastSecs = -1;
+
       function updateCountdown() {
         const endDate = new Date("2026-01-03T11:00:00+09:00");
         const now = new Date();
         const diff = endDate - now;
 
+        const hoursEl = document.getElementById("countHours");
+        const minsEl = document.getElementById("countMins");
+        const secsEl = document.getElementById("countSecs");
+
         if (diff <= 0) {
-          document.getElementById("countDays").textContent = "0";
-          document.getElementById("countHours").textContent = "0";
-          document.getElementById("countMins").textContent = "0";
-          document.getElementById("countSecs").textContent = "0";
+          hoursEl.textContent = "00";
+          minsEl.textContent = "00";
+          secsEl.textContent = "00";
           return;
         }
 
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor(
-          (diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
-        );
+        // 일을 시간으로 통합
+        const totalHours = Math.floor(diff / (1000 * 60 * 60));
         const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
         const secs = Math.floor((diff % (1000 * 60)) / 1000);
 
-        document.getElementById("countDays").textContent = days;
-        document.getElementById("countHours").textContent = hours;
-        document.getElementById("countMins").textContent = mins;
-        document.getElementById("countSecs").textContent = secs;
+        // 숫자 변경 시 애니메이션
+        if (totalHours !== lastHours) {
+          hoursEl.classList.remove("tick");
+          void hoursEl.offsetWidth; // reflow
+          hoursEl.classList.add("tick");
+          lastHours = totalHours;
+        }
+        if (mins !== lastMins) {
+          minsEl.classList.remove("tick");
+          void minsEl.offsetWidth;
+          minsEl.classList.add("tick");
+          lastMins = mins;
+        }
+        if (secs !== lastSecs) {
+          secsEl.classList.remove("tick");
+          void secsEl.offsetWidth;
+          secsEl.classList.add("tick");
+          lastSecs = secs;
+        }
+
+        // 2자리로 패딩 (분, 초만)
+        hoursEl.textContent = totalHours;
+        minsEl.textContent = String(mins).padStart(2, "0");
+        secsEl.textContent = String(secs).padStart(2, "0");
       }
 
       // 체크리스트 토글
