@@ -734,6 +734,10 @@
             <div class="number" id="countMins">50</div>
             <div class="unit">분</div>
           </div>
+          <div class="time-unit">
+            <div class="number" id="countSecs">0</div>
+            <div class="unit">초</div>
+          </div>
         </div>
         <div class="end-time">
           관찰 종료: <strong>2026년 1월 3일 (토) 오전 11:00</strong>
@@ -1078,6 +1082,7 @@
           document.getElementById("countDays").textContent = "0";
           document.getElementById("countHours").textContent = "0";
           document.getElementById("countMins").textContent = "0";
+          document.getElementById("countSecs").textContent = "0";
           return;
         }
 
@@ -1086,10 +1091,12 @@
           (diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
         );
         const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const secs = Math.floor((diff % (1000 * 60)) / 1000);
 
         document.getElementById("countDays").textContent = days;
         document.getElementById("countHours").textContent = hours;
         document.getElementById("countMins").textContent = mins;
+        document.getElementById("countSecs").textContent = secs;
       }
 
       // 체크리스트 토글
@@ -1112,7 +1119,7 @@
       updateClock();
       updateCountdown();
       setInterval(updateClock, 1000);
-      setInterval(updateCountdown, 60000);
+      setInterval(updateCountdown, 1000);
     </script>
   </body>
 </html>
