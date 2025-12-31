@@ -1044,7 +1044,7 @@
           <div class="fill" id="progressFill" style="width: 0%"></div>
         </div>
 
-        <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-item" onclick="toggleCheck(event, this)">
           <input type="checkbox" />
           <div class="info">
             <div class="name">구토 여부 확인</div>
@@ -1053,7 +1053,7 @@
           <div class="time">매 2시간</div>
         </div>
 
-        <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-item" onclick="toggleCheck(event, this)">
           <input type="checkbox" />
           <div class="info">
             <div class="name">식욕 상태</div>
@@ -1062,7 +1062,7 @@
           <div class="time">식사 시</div>
         </div>
 
-        <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-item" onclick="toggleCheck(event, this)">
           <input type="checkbox" />
           <div class="info">
             <div class="name">활동성 관찰</div>
@@ -1071,7 +1071,7 @@
           <div class="time">수시</div>
         </div>
 
-        <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-item" onclick="toggleCheck(event, this)">
           <input type="checkbox" />
           <div class="info">
             <div class="name">복부 상태</div>
@@ -1080,7 +1080,7 @@
           <div class="time">매 4시간</div>
         </div>
 
-        <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-item" onclick="toggleCheck(event, this)">
           <input type="checkbox" />
           <div class="info">
             <div class="name">배변 확인</div>
@@ -1089,7 +1089,7 @@
           <div class="time">배변 시</div>
         </div>
 
-        <div class="check-item" onclick="toggleCheck(this)">
+        <div class="check-item" onclick="toggleCheck(event, this)">
           <input type="checkbox" />
           <div class="info">
             <div class="name">호흡 상태</div>
@@ -1238,7 +1238,14 @@
       }
 
       // 체크리스트 토글
-      function toggleCheck(item) {
+      function toggleCheck(event, item) {
+        // 체크박스 직접 클릭 시 기본 동작 사용
+        if (event.target.type === "checkbox") {
+          item.classList.toggle("checked", event.target.checked);
+          updateProgress();
+          return;
+        }
+        // 다른 영역 클릭 시 체크박스 토글
         const checkbox = item.querySelector('input[type="checkbox"]');
         checkbox.checked = !checkbox.checked;
         item.classList.toggle("checked", checkbox.checked);
