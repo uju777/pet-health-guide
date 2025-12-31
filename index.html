@@ -438,11 +438,20 @@
 
       .check-item {
         display: flex;
-        align-items: flex-start;
+        align-items: center;
         gap: 12px;
-        padding: 12px 0;
+        padding: 16px 12px;
+        margin: 0 -12px;
         border-bottom: 1px solid var(--gray-100);
         cursor: pointer;
+        border-radius: 8px;
+        min-height: 56px;
+        -webkit-tap-highlight-color: transparent;
+        transition: background 0.15s ease;
+      }
+
+      .check-item:active {
+        background: var(--gray-100);
       }
 
       .check-item:last-child {
@@ -450,9 +459,10 @@
       }
 
       .check-item input[type="checkbox"] {
-        width: 20px;
-        height: 20px;
-        margin-top: 2px;
+        width: 24px;
+        height: 24px;
+        min-width: 24px;
+        margin-top: 0;
         accent-color: var(--success);
         cursor: pointer;
       }
@@ -700,7 +710,7 @@
           <dt>섭취량</dt>
           <dd>허니콤보 치킨뼈 2개 (소형)</dd>
           <dt>증상</dt>
-          <dd class="alert">오후 8:10 거품/액체 구토 1회</dd>
+          <dd class="alert">12월 31일 오후 8:10 거품/액체 구토 1회</dd>
           <dt>현재 상태</dt>
           <dd>식욕 정상, 활동성 양호</dd>
           <dt>배변</dt>
